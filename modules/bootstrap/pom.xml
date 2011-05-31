@@ -9,37 +9,49 @@
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.torquebox</groupId>
-  <artifactId>torquebox-services</artifactId>
+  <artifactId>torquebox-bootstrap</artifactId>
   <packaging>jar</packaging>
-  <name>TorqueBox Services Module</name>
+  <name>TorqueBox Bootstrap Module</name>
   <description />
 
   <dependencies>
     <dependency>
-      <groupId>org.jruby</groupId>
-      <artifactId>jruby-complete</artifactId>
+      <groupId>org.jboss</groupId>
+      <artifactId>jboss-vfs</artifactId>
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.torquebox</groupId>
-      <artifactId>torquebox-core</artifactId>
-      <version>${project.version}</version>
+      <groupId>org.jboss.logging</groupId>
+      <artifactId>jboss-logging</artifactId>
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.jboss.as</groupId>
-      <artifactId>jboss-as-jmx</artifactId>
+      <groupId>org.jboss.modules</groupId>
+      <artifactId>jboss-modules</artifactId>
       <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.torquebox</groupId>
-      <artifactId>torquebox-as-test-support</artifactId>
-      <version>${project.version}</version>
-      <scope>test</scope>
     </dependency>
   </dependencies>
 
   <build>
+    <resources> 
+      <resource> 
+        <directory>src/main/resources</directory> 
+      </resource> 
+      <resource> 
+        <directory>src/main/java</directory> 
+        <filtering>true</filtering>
+        <includes>
+          <include>**/*.rb</include>
+          <include>**/*.properties</include>
+        </includes>
+      </resource> 
+      <resource> 
+        <directory>src/main/ruby</directory> 
+        <includes>
+          <include>**/*</include>
+        </includes>
+      </resource>
+    </resources> 
     <plugins> 
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
