@@ -41,8 +41,11 @@ module DataMapper::Adapters
 
 
     def create( resources )
+      puts "============== DEBUGGING ==================="
+      p resources
       cache.transaction do
         resources.each do |resource|
+          p resource
           initialize_serial( resource, @metadata_cache.increment( index_for( resource ) ) )
           cache.put( key( resource ), serialize( resource ) )
         end
