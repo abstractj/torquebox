@@ -19,8 +19,6 @@
 
 package org.torquebox.jobs;
 
-import java.text.ParseException;
-
 import org.jboss.logging.Logger;
 import org.jboss.msc.inject.Injector;
 import org.jboss.msc.service.Service;
@@ -31,8 +29,11 @@ import org.jboss.msc.value.InjectedValue;
 import org.quartz.CronTrigger;
 import org.quartz.JobDetail;
 import org.quartz.SchedulerException;
+import org.quartz.UnableToInterruptJobException;
 import org.torquebox.core.component.ComponentResolver;
 import org.torquebox.core.runtime.RubyRuntimePool;
+
+import java.text.ParseException;
 
 public class ScheduledJob implements Service<ScheduledJob>, ScheduledJobMBean {
     public static final String RUNTIME_POOL_KEY = "torquebox.ruby.pool";
@@ -98,6 +99,15 @@ public class ScheduledJob implements Service<ScheduledJob>, ScheduledJobMBean {
     		log.warn( "An error occurred stoping job " + this.name, ex );
     	} 
     	this.jobDetail = null;	
+    }
+
+    public synchronized void interrupt(){
+        try {
+            this.jobSchedulerInjector.getValue().getScheduler().interrupt(getTriggerName(), this.group);
+        } catch (UnableToInterruptJobException ex) {
+            log.warn("An error occurred interrupting job " + this.name, ex);
+        }
+
     }
     
 
