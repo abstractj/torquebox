@@ -29,7 +29,6 @@ import org.jboss.msc.value.InjectedValue;
 import org.quartz.CronTrigger;
 import org.quartz.JobDetail;
 import org.quartz.SchedulerException;
-import org.quartz.UnableToInterruptJobException;
 import org.torquebox.core.component.ComponentResolver;
 import org.torquebox.core.runtime.RubyRuntimePool;
 
@@ -73,8 +72,7 @@ public class ScheduledJob implements Service<ScheduledJob>, ScheduledJobMBean {
     public void stop(StopContext context) {
     	stop();
     }
-   
-   
+
     public synchronized void start() throws ParseException, SchedulerException {
         this.jobDetail = new JobDetail();
 
@@ -100,16 +98,6 @@ public class ScheduledJob implements Service<ScheduledJob>, ScheduledJobMBean {
     	} 
     	this.jobDetail = null;	
     }
-
-    public synchronized void interrupt(){
-        try {
-            this.jobSchedulerInjector.getValue().getScheduler().interrupt(getTriggerName(), this.group);
-        } catch (UnableToInterruptJobException ex) {
-            log.warn("An error occurred interrupting job " + this.name, ex);
-        }
-
-    }
-    
 
     private String getTriggerName() {
         return this.name + ".trigger";
