@@ -29,7 +29,7 @@ public class RubyJobListener implements TriggerListener{
     @Override
     public String getName() {
         //TODO Implement method
-        return null;
+        return "JobListener name: " + this.getName();
     }
 
     @Override
