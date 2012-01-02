@@ -88,6 +88,7 @@ public class ScheduledJob implements Service<ScheduledJob>, ScheduledJobMBean {
         
         jobScheduler.addComponentResolver( this.name, this.componentResolverInjector.getValue() );
         jobScheduler.getScheduler().scheduleJob( jobDetail, trigger );
+        jobScheduler.getScheduler().addGlobalJobListener(new RubyJobListener());
     }
 
     public synchronized void stop() {
