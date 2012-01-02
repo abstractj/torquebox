@@ -20,39 +20,32 @@
 package org.torquebox.jobs;
 
 import org.jboss.logging.Logger;
-import org.quartz.JobExecutionContext;
-import org.quartz.Trigger;
-import org.quartz.TriggerListener;
+import org.quartz.*;
 
-public class RubyJobListener implements TriggerListener{
+public class RubyJobListener implements JobListener {
 
     @Override
     public String getName() {
-        //TODO Implement method
-        return "JobListener name: " + this.getName();
+        return getClass().getSimpleName();
     }
 
     @Override
-    public void triggerFired(Trigger trigger, JobExecutionContext jobExecutionContext) {
-        log.info("triggerFired: " + trigger.getGroup());
+    public void jobToBeExecuted(JobExecutionContext jobExecutionContext) {
+        log.info("triggerFired: " + jobExecutionContext.getFireTime().toString());
         log.info("triggerFired: " + jobExecutionContext.getJobDetail().getName());
     }
 
     @Override
-    public boolean vetoJobExecution(Trigger trigger, JobExecutionContext jobExecutionContext) {
-        //TODO Implement method
-        return false;
+    public void jobExecutionVetoed(JobExecutionContext jobExecutionContext) {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
-    public void triggerMisfired(Trigger trigger) {
-        //TODO Implement method
+    public void jobWasExecuted(JobExecutionContext jobExecutionContext, JobExecutionException e) {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    @Override
-    public void triggerComplete(Trigger trigger, JobExecutionContext jobExecutionContext, int i) {
-        //TODO Implement method
-    }
+    private static final Logger log = Logger.getLogger("org.torquebox.jobs");
 
-    private static final Logger log = Logger.getLogger( "org.torquebox.jobs" );
+
 }
