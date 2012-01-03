@@ -32,7 +32,8 @@ public class RubyJobListener implements JobListener {
     @Override
     public void jobToBeExecuted(JobExecutionContext jobExecutionContext) {
         log.info("triggerFired: " + jobExecutionContext.getFireTime().toString());
-        log.info("triggerFired: " + jobExecutionContext.getJobDetail().getName());
+        log.info("light my fire: " + jobExecutionContext.getJobDetail().getFullName());
+        log.info("job was Fired: " + jobExecutionContext.getScheduledFireTime());
     }
 
     @Override
