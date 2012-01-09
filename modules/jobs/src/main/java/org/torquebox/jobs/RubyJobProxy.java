@@ -38,6 +38,7 @@ public class RubyJobProxy implements Job, StatefulJob, InterruptableJob {
     	 Ruby ruby = null;
          try {
              ruby = this.runtimePool.borrowRuntime( resolver.getComponentName() );
+             log.info("|||||||||||||||||||| INFO: Executing job here ||||||||||||||||");
              JobComponent job = (JobComponent)resolver.resolve( ruby );
              job.run();
          } catch (Exception e) {
@@ -51,8 +52,9 @@ public class RubyJobProxy implements Job, StatefulJob, InterruptableJob {
 
     @Override
     public void interrupt() throws UnableToInterruptJobException {
-        log.debug("DEBUG: Interrupting job here");
-        log.info("INFO: Interrupting job here");
+        log.debug("||||||||||||||||||| DEBUG: Interrupting job here |||||||||||||||||||");
+        log.info("||||||||||||||||||| INFO: Interrupting job here |||||||||||||||||||");
+        this.interrupt();
     }
 
     private RubyRuntimePool runtimePool;

@@ -31,19 +31,39 @@ public class RubyJobListener implements JobListener {
 
     @Override
     public void jobToBeExecuted(JobExecutionContext jobExecutionContext) {
-        log.info("triggerFired: " + jobExecutionContext.getFireTime().toString());
-        log.info("light my fire: " + jobExecutionContext.getJobDetail().getFullName());
-        log.info("job was Fired: " + jobExecutionContext.getScheduledFireTime());
+        log.info("|||||||||||||||| triggerFired tobe: " + jobExecutionContext.getFireTime().toString());
+        log.info("|||||||||||||||| light my fire tobe: " + jobExecutionContext.getJobDetail().getFullName());
+        log.info("|||||||||||||||| job was Fired tobe: " + jobExecutionContext.getScheduledFireTime());
+        try {
+            Thread.sleep(5000L);
+            log.info("|||||||||||||||| trying to interrupt |||||||||||||||| ");
+            String jobName = jobExecutionContext.getJobDetail().getName();
+            String groupName = jobExecutionContext.getJobDetail().getGroup();
+            log.info("|||||||||||||||| jobName |||||||||||||||| " + jobName);
+            log.info("|||||||||||||||| groupName |||||||||||||||| " + groupName);
+            jobExecutionContext.getScheduler().interrupt(jobName,
+                    groupName);
+        } catch (InterruptedException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (UnableToInterruptJobException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
     }
 
     @Override
     public void jobExecutionVetoed(JobExecutionContext jobExecutionContext) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        log.info("|||||||||||||||| triggerFired: vetoed " + jobExecutionContext.getFireTime().toString());
+        log.info("|||||||||||||||| light my fire: vetoed " + jobExecutionContext.getJobDetail().getFullName());
+        log.info("|||||||||||||||| job was Fired: vetoed " + jobExecutionContext.getScheduledFireTime());
+
     }
 
     @Override
     public void jobWasExecuted(JobExecutionContext jobExecutionContext, JobExecutionException e) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        log.info("|||||||||||||||| triggerFired: executed " + jobExecutionContext.getFireTime().toString());
+        log.info("|||||||||||||||| light my fire: executed " + jobExecutionContext.getJobDetail().getFullName());
+        log.info("|||||||||||||||| job was Fired: executed " + jobExecutionContext.getScheduledFireTime());
+
     }
 
     private static final Logger log = Logger.getLogger("org.torquebox.jobs");
