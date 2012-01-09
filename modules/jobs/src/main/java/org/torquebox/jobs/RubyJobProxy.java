@@ -52,9 +52,7 @@ public class RubyJobProxy implements Job, StatefulJob, InterruptableJob {
 
     @Override
     public void interrupt() throws UnableToInterruptJobException {
-        log.debug("||||||||||||||||||| DEBUG: Interrupting job here |||||||||||||||||||");
         log.info("||||||||||||||||||| INFO: Interrupting job here |||||||||||||||||||");
-        this.interrupt();
     }
 
     private RubyRuntimePool runtimePool;

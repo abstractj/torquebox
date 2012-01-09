@@ -20,7 +20,13 @@
 package org.torquebox.jobs;
 
 import org.jboss.logging.Logger;
-import org.quartz.*;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
+import org.quartz.JobListener;
+
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class RubyJobListener implements JobListener {
 
@@ -30,24 +36,32 @@ public class RubyJobListener implements JobListener {
     }
 
     @Override
-    public void jobToBeExecuted(JobExecutionContext jobExecutionContext) {
+    public void jobToBeExecuted(final JobExecutionContext jobExecutionContext) {
         log.info("|||||||||||||||| triggerFired tobe: " + jobExecutionContext.getFireTime().toString());
         log.info("|||||||||||||||| light my fire tobe: " + jobExecutionContext.getJobDetail().getFullName());
         log.info("|||||||||||||||| job was Fired tobe: " + jobExecutionContext.getScheduledFireTime());
-        try {
-            Thread.sleep(5000L);
-            log.info("|||||||||||||||| trying to interrupt |||||||||||||||| ");
-            String jobName = jobExecutionContext.getJobDetail().getName();
-            String groupName = jobExecutionContext.getJobDetail().getGroup();
-            log.info("|||||||||||||||| jobName |||||||||||||||| " + jobName);
-            log.info("|||||||||||||||| groupName |||||||||||||||| " + groupName);
-            jobExecutionContext.getScheduler().interrupt(jobName,
-                    groupName);
-        } catch (InterruptedException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        } catch (UnableToInterruptJobException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
+        final String jobName = jobExecutionContext.getJobDetail().getName();
+        final String groupName = jobExecutionContext.getJobDetail().getGroup();
+
+        int delay = 5000;   // delay for 5 sec.
+
+        ScheduledExecutorService service = Executors.newScheduledThreadPool(1);
+
+        service.schedule(new Runnable() {
+            public void run() {
+                try {
+                    log.info("|||||||||||||||| jobName |||||||||||||||| " + jobName);
+                    log.info("|||||||||||||||| groupName |||||||||||||||| " + groupName);
+                    jobExecutionContext.getScheduler().interrupt(jobName,
+                            groupName);
+                    log.info("|||||||||||||||| interrupted |||||||||||||||| ");
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }, delay, TimeUnit.MILLISECONDS);
+
     }
 
     @Override
