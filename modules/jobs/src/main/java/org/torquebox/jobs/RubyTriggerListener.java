@@ -20,15 +20,13 @@
 package org.torquebox.jobs;
 
 import org.jboss.logging.Logger;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
-import org.quartz.JobListener;
+import org.quartz.*;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class RubyJobListener implements JobListener {
+public class RubyTriggerListener implements TriggerListener {
 
     @Override
     public String getName() {
@@ -36,7 +34,12 @@ public class RubyJobListener implements JobListener {
     }
 
     @Override
-    public void jobToBeExecuted(final JobExecutionContext jobExecutionContext) {
+    public void triggerFired(Trigger trigger, final JobExecutionContext jobExecutionContext) {
+
+    }
+
+    @Override
+    public boolean vetoJobExecution(Trigger trigger, final JobExecutionContext jobExecutionContext) {
         log.info("|||||||||||||||| triggerFired tobe: " + jobExecutionContext.getFireTime().toString());
         log.info("|||||||||||||||| light my fire tobe: " + jobExecutionContext.getJobDetail().getFullName());
         log.info("|||||||||||||||| job was Fired tobe: " + jobExecutionContext.getScheduledFireTime());
@@ -52,8 +55,7 @@ public class RubyJobListener implements JobListener {
                 try {
                     log.info("|||||||||||||||| jobName |||||||||||||||| " + jobName);
                     log.info("|||||||||||||||| groupName |||||||||||||||| " + groupName);
-                    jobExecutionContext.getScheduler().interrupt(jobName,
-                            groupName);
+                    ((InterruptableJob) jobExecutionContext.getJobInstance()).interrupt();
                     log.info("|||||||||||||||| interrupted |||||||||||||||| ");
 
                 } catch (Exception e) {
@@ -62,22 +64,17 @@ public class RubyJobListener implements JobListener {
             }
         }, delay, TimeUnit.MILLISECONDS);
 
+        return true;
     }
 
     @Override
-    public void jobExecutionVetoed(JobExecutionContext jobExecutionContext) {
-        log.info("|||||||||||||||| triggerFired: vetoed " + jobExecutionContext.getFireTime().toString());
-        log.info("|||||||||||||||| light my fire: vetoed " + jobExecutionContext.getJobDetail().getFullName());
-        log.info("|||||||||||||||| job was Fired: vetoed " + jobExecutionContext.getScheduledFireTime());
-
+    public void triggerMisfired(Trigger trigger) {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
-    public void jobWasExecuted(JobExecutionContext jobExecutionContext, JobExecutionException e) {
-        log.info("|||||||||||||||| triggerFired: executed " + jobExecutionContext.getFireTime().toString());
-        log.info("|||||||||||||||| light my fire: executed " + jobExecutionContext.getJobDetail().getFullName());
-        log.info("|||||||||||||||| job was Fired: executed " + jobExecutionContext.getScheduledFireTime());
-
+    public void triggerComplete(Trigger trigger, JobExecutionContext jobExecutionContext, int i) {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     private static final Logger log = Logger.getLogger("org.torquebox.jobs");
