@@ -85,6 +85,7 @@ public class ScheduledJobInstaller implements DeploymentUnitProcessor {
                 metaData.getName(),
                 metaData.getDescription(),
                 metaData.getCronExpression(),
+                metaData.getJobTimeout(),
                 metaData.isSingleton(),
                 metaData.getRubyClassName()
                 );
