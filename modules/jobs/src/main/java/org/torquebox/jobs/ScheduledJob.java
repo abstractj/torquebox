@@ -91,8 +91,9 @@ public class ScheduledJob implements Service<ScheduledJob>, ScheduledJobMBean {
         JobScheduler jobScheduler = this.jobSchedulerInjector.getValue();
         
         jobScheduler.addComponentResolver( this.name, this.componentResolverInjector.getValue() );
-        jobScheduler.getScheduler().scheduleJob( jobDetail, trigger );
-        jobScheduler.getScheduler().addGlobalTriggerListener(new RubyTriggerListener());
+        jobScheduler.getScheduler().scheduleJob(jobDetail, trigger);
+
+        //jobScheduler.getScheduler().addGlobalTriggerListener(new RubyTriggerListener());
 
     }
 

@@ -38,8 +38,8 @@ public class RubyJobProxy implements Job, StatefulJob, InterruptableJob {
     	 Ruby ruby = null;
          try {
              ruby = this.runtimePool.borrowRuntime( resolver.getComponentName() );
-             log.info("|||||||||||||||||||| INFO: Executing job here ||||||||||||||||");
              JobComponent job = (JobComponent)resolver.resolve( ruby );
+             RubyJobWatchDog.start(context);
              job.run();
          } catch (Exception e) {
         	 throw new JobExecutionException( e );
