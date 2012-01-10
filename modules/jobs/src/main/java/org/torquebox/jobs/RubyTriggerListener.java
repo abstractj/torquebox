@@ -40,11 +40,13 @@ public class RubyTriggerListener implements TriggerListener {
 
     @Override
     public boolean vetoJobExecution(Trigger trigger, final JobExecutionContext jobExecutionContext) {
-        log.info("|||||||||||||||| triggerFired tobe: " + jobExecutionContext.getFireTime().toString());
-        log.info("|||||||||||||||| light my fire tobe: " + jobExecutionContext.getJobDetail().getFullName());
-        log.info("|||||||||||||||| job was Fired tobe: " + jobExecutionContext.getScheduledFireTime());
-        final String jobName = jobExecutionContext.getJobDetail().getName();
-        final String groupName = jobExecutionContext.getJobDetail().getGroup();
+
+        watchDogJob(jobExecutionContext);
+
+        return true;
+    }
+
+    private void watchDogJob(final JobExecutionContext jobExecutionContext) {
 
         int delay = 5000;   // delay for 5 sec.
 
@@ -53,8 +55,7 @@ public class RubyTriggerListener implements TriggerListener {
         service.schedule(new Runnable() {
             public void run() {
                 try {
-                    log.info("|||||||||||||||| jobName |||||||||||||||| " + jobName);
-                    log.info("|||||||||||||||| groupName |||||||||||||||| " + groupName);
+                    log.info("|||||||||||||||| trying to interrupt |||||||||||||||| ");
                     ((InterruptableJob) jobExecutionContext.getJobInstance()).interrupt();
                     log.info("|||||||||||||||| interrupted |||||||||||||||| ");
 
@@ -63,8 +64,6 @@ public class RubyTriggerListener implements TriggerListener {
                 }
             }
         }, delay, TimeUnit.MILLISECONDS);
-
-        return true;
     }
 
     @Override
