@@ -20,7 +20,10 @@
 package org.torquebox.jobs;
 
 import org.jboss.logging.Logger;
-import org.quartz.*;
+import org.quartz.InterruptableJob;
+import org.quartz.JobExecutionContext;
+import org.quartz.Trigger;
+import org.quartz.TriggerListener;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -52,6 +55,8 @@ public class RubyTriggerListener implements TriggerListener {
         log.info("|||||||||||||||| watchdog delay |||||||||||||||| " + delay);
 
         ScheduledExecutorService service = Executors.newScheduledThreadPool(1);
+        //ThreadPool
+
 
         service.schedule(new Runnable() {
             public void run() {
