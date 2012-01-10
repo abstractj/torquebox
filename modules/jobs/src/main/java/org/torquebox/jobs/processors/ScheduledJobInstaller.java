@@ -19,11 +19,6 @@
 
 package org.torquebox.jobs.processors;
 
-import java.util.Hashtable;
-import java.util.List;
-
-import javax.management.MBeanServer;
-
 import org.jboss.as.jmx.MBeanRegistrationService;
 import org.jboss.as.jmx.MBeanServerService;
 import org.jboss.as.jmx.ObjectNameFactory;
@@ -45,6 +40,10 @@ import org.torquebox.jobs.ScheduledJob;
 import org.torquebox.jobs.ScheduledJobMBean;
 import org.torquebox.jobs.ScheduledJobMetaData;
 import org.torquebox.jobs.as.JobsServices;
+
+import javax.management.MBeanServer;
+import java.util.Hashtable;
+import java.util.List;
 
 /**
  * <pre>
@@ -83,6 +82,7 @@ public class ScheduledJobInstaller extends ClusterAwareProcessor {
                 metaData.getName(),
                 metaData.getDescription(),
                 metaData.getCronExpression(),
+                metaData.getTimeout(),
                 metaData.isSingleton(),
                 metaData.getRubyClassName(),
                 metaData.getRubyRequirePath()

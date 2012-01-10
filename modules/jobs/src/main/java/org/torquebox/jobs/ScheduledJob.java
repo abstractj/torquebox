@@ -36,12 +36,13 @@ import java.text.ParseException;
 
 public class ScheduledJob implements Service<ScheduledJob>, ScheduledJobMBean {
     public static final String RUNTIME_POOL_KEY = "torquebox.ruby.pool";
-	
-    public ScheduledJob(String group, String name, String description, String cronExpression, boolean singleton, String rubyClassName, String rubyRequirePath) {
+
+    public ScheduledJob(String group, String name, String description, String cronExpression, String timeout, boolean singleton, String rubyClassName, String rubyRequirePath) {
     	this.group = group;
     	this.name = name;
     	this.description = description;
     	this.cronExpression = cronExpression;
+        this.timeout = timeout;
     	this.singleton = singleton;
     	this.rubyClassName = rubyClassName;
     	this.rubyRequirePath = rubyRequirePath;
@@ -81,6 +82,9 @@ public class ScheduledJob implements Service<ScheduledJob>, ScheduledJobMBean {
         jobDetail.setDescription( this.description );
         jobDetail.setJobClass( RubyJobProxy.class );
         jobDetail.setRequestsRecovery( true );
+        jobDetail.getJobDataMap().put("timeout", timeout);
+
+        log.info("||||||||||||||||||||| " + timeout + "||||||||||||||||||||||||||");
         
         CronTrigger trigger = new CronTrigger( getTriggerName(), this.group, this.cronExpression );
         
@@ -157,6 +161,14 @@ public class ScheduledJob implements Service<ScheduledJob>, ScheduledJobMBean {
         return this.cronExpression;
     }
 
+    public String getTimeout() {
+        return timeout;
+    }
+
+    public void setTimeout(String timeout) {
+        this.timeout = timeout;
+    }
+
     public void setRubyRuntimePool(RubyRuntimePool runtimePool) {
         this.runtimePool = runtimePool;
     }
@@ -189,6 +201,7 @@ public class ScheduledJob implements Service<ScheduledJob>, ScheduledJobMBean {
     private String rubyRequirePath;
 
     private String cronExpression;
+    private String timeout;
 
     private RubyRuntimePool runtimePool;
     

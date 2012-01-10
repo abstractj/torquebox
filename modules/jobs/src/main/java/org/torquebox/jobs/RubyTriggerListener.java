@@ -48,7 +48,8 @@ public class RubyTriggerListener implements TriggerListener {
 
     private void watchDogJob(final JobExecutionContext jobExecutionContext) {
 
-        int delay = 5000;   // delay for 5 sec.
+        int delay = Integer.valueOf(jobExecutionContext.getJobDetail().getJobDataMap().get("timeout").toString());   // delay for 5 sec.
+        log.info("|||||||||||||||| watchdog delay |||||||||||||||| " + delay);
 
         ScheduledExecutorService service = Executors.newScheduledThreadPool(1);
 

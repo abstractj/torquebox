@@ -19,14 +19,14 @@
 
 package org.torquebox.jobs.processors;
 
-import java.util.Map;
-
 import org.jboss.as.server.deployment.DeploymentUnit;
 import org.jboss.as.server.deployment.DeploymentUnitProcessingException;
 import org.jboss.logging.Logger;
 import org.torquebox.core.processors.AbstractSplitYamlParsingProcessor;
 import org.torquebox.core.util.StringUtils;
 import org.torquebox.jobs.ScheduledJobMetaData;
+
+import java.util.Map;
 
 /**
  * Creates ScheduledJobMetaData instances from jobs.yml
@@ -45,6 +45,7 @@ public class JobsYamlParsingProcessor extends AbstractSplitYamlParsingProcessor 
             Map<String, ?> jobSpec = data.get( jobName );
             String description = (String) jobSpec.get( "description" );
             String job = (String) jobSpec.get( "job" );
+            String timeout = jobSpec.get( "timeout" ).toString();
             String cron = (String) jobSpec.get( "cron" );
             Object singleton = jobSpec.get("singleton");
             Map<String, Object> params = (Map<String, Object>)jobSpec.get( "config" );
@@ -70,6 +71,7 @@ public class JobsYamlParsingProcessor extends AbstractSplitYamlParsingProcessor 
             }
             jobMetaData.setRubyClassName( job.trim() );
             jobMetaData.setCronExpression( cron.trim() );
+            jobMetaData.setTimeout(timeout.trim());
             jobMetaData.setParameters( params );
             jobMetaData.setRubyRequirePath( StringUtils.underscore( job.trim() ) );
             jobMetaData.setSingleton( singleton == null ? false : (Boolean) singleton );
